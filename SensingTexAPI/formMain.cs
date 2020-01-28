@@ -17,12 +17,12 @@ namespace SensingTexAPI
         public const int COLS = 16;
         public const int BUTTONSIZE = 40;
 
-        public static Button[,] botones =new Button[ROWS,COLS];
+        public static Button[,] buttons =new Button[ROWS,COLS];
         public static int threshold = 0;
         public static int age = 0;
         public static int height = 0;
         public static int weight = 0;
-        public static bool pintando = false;
+        public static bool painting = false;
 
         public formMain()
         {
@@ -39,118 +39,118 @@ namespace SensingTexAPI
             for (int i = 0; i<ROWS; i++)
                 for (int j = 0; j<COLS; j++)
                 {
-                    botones[i, j] = new Button();
-                    botones[i, j].Size = new Size(BUTTONSIZE, BUTTONSIZE);
-                    botones[i, j].Location = new Point(i * BUTTONSIZE, j * BUTTONSIZE);
-                    botones[i, j].Text = "";
-                    botones[i, j].FlatAppearance.BorderSize = 0;
-                    botones[i, j].FlatStyle = FlatStyle.Flat;
-                    botones[i, j].BackColor = Color.Black;//colorFromValor(i * 256, 0, 4096);
-                    botones[i, j].Visible = true;
-                    this.panel1.Controls.Add(botones[i, j]);
+                    buttons[i, j] = new Button();
+                    buttons[i, j].Size = new Size(BUTTONSIZE, BUTTONSIZE);
+                    buttons[i, j].Location = new Point(i * BUTTONSIZE, j * BUTTONSIZE);
+                    buttons[i, j].Text = "";
+                    buttons[i, j].FlatAppearance.BorderSize = 0;
+                    buttons[i, j].FlatStyle = FlatStyle.Flat;
+                    buttons[i, j].BackColor = Color.Black;//colorFromValue(i * 256, 0, 4096);
+                    buttons[i, j].Visible = true;
+                    this.panel1.Controls.Add(buttons[i, j]);
                 }
         }
 
         public void OnDataSensor(object sender, DataReadyEventArgs e)
         {
-            if (formMain.pintando == false)
+            if (formMain.painting == false)
             {
-                Thread th = new Thread(pintarCuadro);
+                Thread th = new Thread(paintPicture);
                 th.Start(e.Data);
             }
         }
 
-        void pintarCuadro(object datos)
+        void paintPicture(object data)
         {
-            formMain.pintando = true;
+            formMain.painting = true;
             try
             {
-                cambiarLED();
-                double[,] datosArray = (double[,])datos;
-                double[,] copiaDatos = new double[ROWS, COLS];
+                changeLED();
+                double[,] dataArray = (double[,])data;
+                double[,] copyData = new double[ROWS, COLS];
                 for (int i = 0; i < ROWS; i++)
                     for (int j = 0; j < COLS; j++)
-                        copiaDatos[i, j] = datosArray[i, j];
+                        copyData[i, j] = dataArray[i, j];
 
                 for (int i = 0; i < ROWS; i++)
                     for (int j = 0; j < COLS; j++)
-                        asignarColor(i, j, (int)copiaDatos[i, j]);
+                        assignColor(i, j, (int)copyData[i, j]);
 
-                formMain.pintando = false;
+                formMain.painting = false;
             }
             catch (Exception ex)
             {
-                formMain.pintando = false;
+                formMain.painting = false;
             }
         }
 
-        delegate void asignarColorCB(int fila, int columna, int valor);
-        private void asignarColorDirecto(int fila, int columna, int valor)
+        delegate void assignColorCB(int row, int column, int value);
+        private void assignColorDirect(int row, int column, int value)
         {
-            botones[fila, columna].Text = valor.ToString();
-            botones[fila, columna].BackColor = colorFromValor(valor,threshold, 4096);
+            buttons[row, column].Text = value.ToString();
+            buttons[row, column].BackColor = colorFromValue(value,threshold, 4096);
         }
 
-        private void asignarColor(int fila, int columna, int valor)
+        private void assignColor(int row, int column, int value)
         {
-            asignarColorCB ac = new asignarColorCB(asignarColorDirecto);
-            this.Invoke(ac, new object[] { fila, columna, valor });
+            assignColorCB ac = new assignColorCB(assignColorDirect);
+            this.Invoke(ac, new object[] { row, column, value });
         }
 
-        delegate void cambiarLEDCB();
-        private void cambiarLEDDirecto()
+        delegate void changeLEDCB();
+        private void changeLEDDirect()
         {
             if (this.btn_LEDrx.BackColor== Color.Green)
                 this.btn_LEDrx.BackColor = Color.Yellow;
             else
                 this.btn_LEDrx.BackColor = Color.Green;
         }
-        private void cambiarLED()
+        private void changeLED()
         {
-            cambiarLEDCB ac = new cambiarLEDCB(cambiarLEDDirecto);
+            changeLEDCB ac = new changeLEDCB(changeLEDDirect);
             this.Invoke(ac, new object[] {});
         }
 
-        private Color colorFromValor(int dato, int threshold, int valorMaximo)
+        private Color colorFromValue(int data, int threshold, int maxValue)
         {
-            Color retorno;
+            Color returnColor;
             int red=0;
             int blue = 0;
             int green = 0;
-            int valor = (int)((float)dato * (float)((float)1024 / (float)valorMaximo)); //normalizo a 1024 valores de color
+            int value = (int)((float)data * (float)((float)1024 / (float)maxValue)); //normalizes to 1024 values of color
 
-            if (dato <= threshold)
+            if (data <= threshold)
             {
                 red = 0; blue = 0; green = 0;
             }
-            else if (dato > threshold && valor < 255)
+            else if (data > threshold && value < 255)
             {
-                red = 0; blue = 255; green = valor;
+                red = 0; blue = 255; green = value;
             }
-            else if (valor > 255 && valor < 510)
+            else if (value > 255 && value < 510)
             {
-                red = 0; blue = 255 + 255 - valor; green = 255;
+                red = 0; blue = 255 + 255 - value; green = 255;
             }
-            else if (valor > 510 && valor < 765)
+            else if (value > 510 && value < 765)
             {
-                red = valor - 510; blue = 0; green = 255;
+                red = value - 510; blue = 0; green = 255;
             }
-            else if (valor > 765)
+            else if (value > 765)
             {
-                red = 255; blue = 0; green = 1020 - valor;
+                red = 255; blue = 0; green = 1020 - value;
             }
             else
             {
                 red = 255; blue = 0; green = 0;
             }
 
-            retorno = new Color();
-            retorno = Color.FromArgb(red, green, blue);
+            returnColor = new Color();
+            returnColor = Color.FromArgb(red, green, blue);
 
-            return retorno;
+            return returnColor;
         }
 
-        private void btn_conectar_Click(object sender, EventArgs e)
+        private void btn_connect_Click(object sender, EventArgs e)
         {
             try
             {
@@ -158,16 +158,16 @@ namespace SensingTexAPI
                 sensor.StartDevice();
 
                 if (sensor.IsOpen())
-                    this.btn_ledConectado.BackColor = Color.Green;
+                    this.btn_ledConnected.BackColor = Color.Green;
                 else
-                    this.btn_ledConectado.BackColor = Color.Red;
+                    this.btn_ledConnected.BackColor = Color.Red;
             }
             catch (Exception ex)
             {
             }
         }
 
-        private void btn_desconectar_Click(object sender, EventArgs e)
+        private void btn_disconnect_Click(object sender, EventArgs e)
         {
             try
             {
@@ -177,9 +177,9 @@ namespace SensingTexAPI
                 }
 
                 if (sensor.IsStart())
-                    this.btn_ledConectado.BackColor = Color.Green;
+                    this.btn_ledConnected.BackColor = Color.Green;
                 else
-                    this.btn_ledConectado.BackColor = Color.Red;
+                    this.btn_ledConnected.BackColor = Color.Red;
 
             }
             catch (Exception ex)

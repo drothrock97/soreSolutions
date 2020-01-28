@@ -32,12 +32,12 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_port = new System.Windows.Forms.Label();
             this.txt_port = new System.Windows.Forms.TextBox();
-            this.btn_conectar = new System.Windows.Forms.Button();
-            this.btn_desconectar = new System.Windows.Forms.Button();
+            this.btn_connect = new System.Windows.Forms.Button();
+            this.btn_disconnect = new System.Windows.Forms.Button();
             this.btn_LEDrx = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.btn_ledConectado = new System.Windows.Forms.Button();
+            this.btn_ledConnected = new System.Windows.Forms.Button();
             this.num_threshold = new System.Windows.Forms.NumericUpDown();
             this.num_age = new System.Windows.Forms.NumericUpDown();
             this.num_height = new System.Windows.Forms.NumericUpDown();
@@ -81,28 +81,28 @@
             this.txt_port.TabIndex = 3;
             this.txt_port.Text = "COMXX";
             // 
-            // btn_conectar
+            // btn_connect
             // 
-            this.btn_conectar.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btn_conectar.Location = new System.Drawing.Point(1206, 107);
-            this.btn_conectar.Margin = new System.Windows.Forms.Padding(6);
-            this.btn_conectar.Name = "btn_conectar";
-            this.btn_conectar.Size = new System.Drawing.Size(165, 42);
-            this.btn_conectar.TabIndex = 4;
-            this.btn_conectar.Text = "CONNECT";
-            this.btn_conectar.UseVisualStyleBackColor = true;
-            this.btn_conectar.Click += new System.EventHandler(this.btn_conectar_Click);
+            this.btn_connect.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.btn_connect.Location = new System.Drawing.Point(1206, 107);
+            this.btn_connect.Margin = new System.Windows.Forms.Padding(6);
+            this.btn_connect.Name = "btn_connect";
+            this.btn_connect.Size = new System.Drawing.Size(165, 42);
+            this.btn_connect.TabIndex = 4;
+            this.btn_connect.Text = "CONNECT";
+            this.btn_connect.UseVisualStyleBackColor = true;
+            this.btn_connect.Click += new System.EventHandler(this.btn_connect_Click);
             // 
-            // btn_desconectar
+            // btn_disconnect
             // 
-            this.btn_desconectar.Location = new System.Drawing.Point(1206, 155);
-            this.btn_desconectar.Margin = new System.Windows.Forms.Padding(6);
-            this.btn_desconectar.Name = "btn_desconectar";
-            this.btn_desconectar.Size = new System.Drawing.Size(165, 42);
-            this.btn_desconectar.TabIndex = 5;
-            this.btn_desconectar.Text = "DISCONNECT";
-            this.btn_desconectar.UseVisualStyleBackColor = true;
-            this.btn_desconectar.Click += new System.EventHandler(this.btn_desconectar_Click);
+            this.btn_disconnect.Location = new System.Drawing.Point(1206, 155);
+            this.btn_disconnect.Margin = new System.Windows.Forms.Padding(6);
+            this.btn_disconnect.Name = "btn_disconnect";
+            this.btn_disconnect.Size = new System.Drawing.Size(165, 42);
+            this.btn_disconnect.TabIndex = 5;
+            this.btn_disconnect.Text = "DISCONNECT";
+            this.btn_disconnect.UseVisualStyleBackColor = true;
+            this.btn_disconnect.Click += new System.EventHandler(this.btn_disconnect_Click);
             // 
             // btn_LEDrx
             // 
@@ -134,16 +134,16 @@
             this.label2.TabIndex = 9;
             this.label2.Text = "CONNECTED";
             // 
-            // btn_ledConectado
+            // btn_ledConnected
             // 
-            this.btn_ledConectado.BackColor = System.Drawing.Color.Red;
-            this.btn_ledConectado.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btn_ledConectado.Location = new System.Drawing.Point(1208, 233);
-            this.btn_ledConectado.Margin = new System.Windows.Forms.Padding(6);
-            this.btn_ledConectado.Name = "btn_ledConectado";
-            this.btn_ledConectado.Size = new System.Drawing.Size(42, 42);
-            this.btn_ledConectado.TabIndex = 8;
-            this.btn_ledConectado.UseVisualStyleBackColor = false;
+            this.btn_ledConnected.BackColor = System.Drawing.Color.Red;
+            this.btn_ledConnected.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btn_ledConnected.Location = new System.Drawing.Point(1208, 233);
+            this.btn_ledConnected.Margin = new System.Windows.Forms.Padding(6);
+            this.btn_ledConnected.Name = "btn_ledConnected";
+            this.btn_ledConnected.Size = new System.Drawing.Size(42, 42);
+            this.btn_ledConnected.TabIndex = 8;
+            this.btn_ledConnected.UseVisualStyleBackColor = false;
             // 
             // num_threshold
             // 
@@ -256,11 +256,11 @@
             this.Controls.Add(this.num_height);
             this.Controls.Add(this.num_weight);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.btn_ledConectado);
+            this.Controls.Add(this.btn_ledConnected);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btn_LEDrx);
-            this.Controls.Add(this.btn_desconectar);
-            this.Controls.Add(this.btn_conectar);
+            this.Controls.Add(this.btn_disconnect);
+            this.Controls.Add(this.btn_connect);
             this.Controls.Add(this.txt_port);
             this.Controls.Add(this.lbl_port);
             this.Controls.Add(this.panel1);
@@ -286,12 +286,12 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label lbl_port;
         private System.Windows.Forms.TextBox txt_port;
-        private System.Windows.Forms.Button btn_conectar;
-        private System.Windows.Forms.Button btn_desconectar;
+        private System.Windows.Forms.Button btn_connect;
+        private System.Windows.Forms.Button btn_disconnect;
         private System.Windows.Forms.Button btn_LEDrx;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button btn_ledConectado;
+        private System.Windows.Forms.Button btn_ledConnected;
         private System.Windows.Forms.NumericUpDown num_threshold;
         private System.Windows.Forms.NumericUpDown num_age;
         private System.Windows.Forms.NumericUpDown num_height;
