@@ -1,2 +1,2 @@
 # soreSolutions
-For MSD project P20018
+This repository was created for the Sore Solutions Pressure Sore Alert Device. RIT MSD P20018.
