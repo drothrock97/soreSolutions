@@ -764,12 +764,12 @@ namespace SensingTexAPI
 			{
 				for (var y = 0; y < Columns; y++)
 				{
-					if (x >= 1 && x <= 3 || y >= 1 && y <= 3 || x >= 14 && x <= 16 || y >= 14 && y <= 16)
+					if (x >= 0 && x <= 2 || y >= 0 && y <= 2 || x >= 13 && x <= 15 || y >= 13 && y <= 15)
 					{
 						double setVal = max / 5;
 						data[x, y] = setVal;
 					}
-					else if(x >= 4 && x <= 6 || y >= 4 && y <= 6 || x >= 11 && x <= 13 || y >= 11 && y <= 13)
+					else if(x >= 3 && x <= 5 || y >= 3 && y <= 5 || x >= 10 && x <= 12 || y >= 10 && y <= 12)
 					{
 						double setVal = max / 4;
 						data[x, y] = setVal;
