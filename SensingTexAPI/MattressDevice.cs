@@ -177,7 +177,7 @@ namespace SensingTexAPI
         /// <returns></returns>
 		public bool Open(string portName)
 		{
-			if (portName != "SIM")
+			if (portName != "SIM" && portName != "SETSIM")
 			{
 				if (port == null || portName == null)
 					return false;
@@ -234,7 +234,7 @@ namespace SensingTexAPI
 		{
 			portOpen = false;
 
-			if (portName == "SIM")
+			if (portName == "SIM" || portName == "SETSIM")
 			{
 				this.Stop();
 			}
@@ -267,6 +267,11 @@ namespace SensingTexAPI
 				StopDevice();
 				tmp = StartSimulation();
 			}
+			else if (portName == "SETSIM")
+			{
+				StopDevice();
+				tmp = StartSetSimulation();
+			}
 			else
 			{
 				StopSimulation();
@@ -285,7 +290,7 @@ namespace SensingTexAPI
 		{
 			bool tmp;
 
-			if (portName == "SIM")
+			if (portName == "SIM" || portName == "SETSIM")
 			{
 				StopDevice();
 				tmp = StopSimulation();
@@ -310,10 +315,18 @@ namespace SensingTexAPI
 
 			return true;
 		}
-        /// <summary>
-        /// Stop the data simulation for port "SIM"
-        /// </summary>
-        /// <returns>always true</returns>
+
+		public bool StartSetSimulation()
+		{
+			simulationTimer = new Timer(new TimerCallback(OnSetSimulationTimerEvent), null, 0, (int)(1000 * Period));
+			started = true;
+
+			return true;
+		}
+		/// <summary>
+		/// Stop the data simulation for port "SIM"
+		/// </summary>
+		/// <returns>always true</returns>
 		public bool StopSimulation()
 		{
 			if (simulationTimer != null)
@@ -413,6 +426,11 @@ namespace SensingTexAPI
 					StopSimulation();
 					StartSimulation();
 				}
+				else if (portName == "SETSIM")
+				{
+					StopSimulation();
+					StartSetSimulation();
+				}
 				else
 				{
 					SendConfiguration();
@@ -476,6 +494,7 @@ namespace SensingTexAPI
 				i++;
 			}
 			ports[i] = "SIM";
+			ports[i] = "SETSIM";
 
 			return ports;
 		}
@@ -486,7 +505,7 @@ namespace SensingTexAPI
         /// <returns>true: opened. false: closed.</returns>
 		public bool IsOpen()
 		{
-			if (portName == "SIM")
+			if (portName == "SIM" || portName == "SETSIM")
 				return portOpen;
 
 			return port.IsOpen;
@@ -736,9 +755,40 @@ namespace SensingTexAPI
 			return data;
 		}
 
-        /// <summary>
-        /// Raises the data event
-        /// </summary>
+		public double[,] GetSetData(double max)
+		{
+			Double[,] data = new Double[Rows, Columns];
+
+			Random rand = new Random();
+			for (var x = 0; x < Rows; x++)
+			{
+				for (var y = 0; y < Columns; y++)
+				{
+					if (x >= 1 && x <= 3 || y >= 1 && y <= 3 || x >= 14 && x <= 16 || y >= 14 && y <= 16)
+					{
+						double setVal = max / 5;
+						data[x, y] = setVal;
+					}
+					else if(x >= 4 && x <= 6 || y >= 4 && y <= 6 || x >= 11 && x <= 13 || y >= 11 && y <= 13)
+					{
+						double setVal = max / 4;
+						data[x, y] = setVal;
+					}
+					else 
+					{
+						double setVal = max / 2;
+						data[x, y] = setVal;
+					}
+
+				}
+			}
+
+			return data;
+		}
+
+		/// <summary>
+		/// Raises the data event
+		/// </summary>
 		private void EmitDataReadyEvent()
 		{
             //Raise and event with new data available
@@ -790,10 +840,20 @@ namespace SensingTexAPI
 				EmitDataReadyEvent();
 			}
 		}
-        /// <summary>
-        /// "SIM" port timer event handler
-        /// </summary>
-        /// <param name="sender"></param>
+
+		protected void OnSetSimulationTimerEvent(object sender)
+		{
+			if (portOpen && started && portName == "SETSIM")
+			{
+				tmpData = GetSetData(4096);
+
+				EmitDataReadyEvent();
+			}
+		}
+		/// <summary>
+		/// "SIM" port timer event handler
+		/// </summary>
+		/// <param name="sender"></param>
 		protected void OnDetectPortTimerEvent(object sender)
 		{
             bool oldstarted;
