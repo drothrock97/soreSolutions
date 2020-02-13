@@ -96,8 +96,14 @@ namespace SensingTexAPI
             // Converting digital value to PSI value using calculated
             double psiValue = 0.00573*System.Math.Exp(0.00239*value);
             psiValue = (double)System.Math.Round(psiValue, 2);
+            
+
             buttons[row, column].Text = psiValue.ToString();
 
+            double psiAvg = 0;
+
+
+            // code for displaying raw data values
             //buttons[row, column].Text = value.ToString();
         }
 
