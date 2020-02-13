@@ -93,7 +93,7 @@ namespace SensingTexAPI
         {
             buttons[row, column].BackColor = colorFromValue(value,threshold, 4096);
 
-            // Converting digital value to PSI value
+            // Converting digital value to PSI value using calculated
             double psiValue = 0.00573*System.Math.Exp(0.00239*value);
             psiValue = (double)System.Math.Round(psiValue, 2);
             buttons[row, column].Text = psiValue.ToString();
