@@ -766,17 +766,17 @@ namespace SensingTexAPI
 				{
 					if (x >= 0 && x <= 2 || y >= 0 && y <= 2 || x >= 13 && x <= 15 || y >= 13 && y <= 15)
 					{
-						double setVal = max / 5;
+						double setVal = max / 2.5;
 						data[x, y] = setVal;
 					}
 					else if(x >= 3 && x <= 5 || y >= 3 && y <= 5 || x >= 10 && x <= 12 || y >= 10 && y <= 12)
 					{
-						double setVal = max / 4;
+						double setVal = max / 1.75;
 						data[x, y] = setVal;
 					}
 					else 
 					{
-						double setVal = max / 2;
+						double setVal = max / 1.45;
 						data[x, y] = setVal;
 					}
 
