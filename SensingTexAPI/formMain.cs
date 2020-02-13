@@ -23,6 +23,7 @@ namespace SensingTexAPI
         public static int height = 0;
         public static int weight = 0;
         public static int bmi;
+        public static int timeLeft = 5;
         public static bool painting = false;
 
         public formMain()
@@ -283,6 +284,32 @@ namespace SensingTexAPI
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            timer1.Start();
+            if (timeLeft > 0)
+            {
+                // Display the amount of time left
+                timeLeft = timeLeft - 1;
+                timeLabel.Text = timeLeft + " minutes";
+            }
+            else
+            {
+                timer1.Stop();
+                timeLabel.Text = ("You are at risk of a pressure sore");
+            }
+        }
+
+        private void label9_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged_1(object sender, EventArgs e)
         {
 
         }

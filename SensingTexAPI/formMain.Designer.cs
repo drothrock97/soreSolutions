@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(formMain));
             this.panel1 = new System.Windows.Forms.Panel();
             this.lbl_port = new System.Windows.Forms.Label();
@@ -50,6 +51,9 @@
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.averagePSIText = new System.Windows.Forms.TextBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.label9 = new System.Windows.Forms.Label();
+            this.timeLabel = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.num_threshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_age)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_height)).BeginInit();
@@ -286,12 +290,40 @@
             this.averagePSIText.TabIndex = 14;
             this.averagePSIText.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 60000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(1207, 918);
+            this.label9.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(153, 25);
+            this.label9.TabIndex = 17;
+            this.label9.Text = "Time Remaining";
+            this.label9.Click += new System.EventHandler(this.label9_Click);
+            // 
+            // timeLabel
+            // 
+            this.timeLabel.Location = new System.Drawing.Point(1206, 949);
+            this.timeLabel.Margin = new System.Windows.Forms.Padding(6);
+            this.timeLabel.Name = "timeLabel";
+            this.timeLabel.ReadOnly = true;
+            this.timeLabel.Size = new System.Drawing.Size(162, 29);
+            this.timeLabel.TabIndex = 16;
+            //this.timeLabel.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1388, 1224);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.timeLabel);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.averagePSIText);
             this.Controls.Add(this.label7);
@@ -354,6 +386,9 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox averagePSIText;
+        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox timeLabel;
     }
 }
 
