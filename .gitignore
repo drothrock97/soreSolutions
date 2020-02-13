@@ -1,3 +1,6 @@
 ".jfm"
 ".lock"
 /.vs/SensingTexAPI/v16/Server/sqlite3/db.lock
+/.vs/SensingTexAPI/v16/Server/sqlite3/storage.ide
+/.vs/SensingTexAPI/v16/Server/sqlite3/storage.ide-shm
+/.vs/SensingTexAPI/v16/Server/sqlite3/storage.ide-wal
