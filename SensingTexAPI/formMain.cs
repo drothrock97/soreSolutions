@@ -89,6 +89,26 @@ namespace SensingTexAPI
         }
 
         delegate void assignColorCB(int row, int column, int value);
+
+        public void averagePSICalc(int row, int column, int value)
+        {
+            double[] dataArray = { row, column, value };
+            double sum = 0;
+            double avg = 0;
+            int nValues = 0;
+            for (int k = 0; k<row; k++)
+                for (int j = 0; j<column; j++)
+                {
+                    if (value > threshold)
+                    {
+                        sum += dataArray[value];
+                        nValues++;
+
+                    }
+                }
+            avg = sum / nValues;
+            averagePSIText.Text = avg.ToString();
+        }
         private void assignColorDirect(int row, int column, int value)
         {
             buttons[row, column].BackColor = colorFromValue(value,threshold, 4096);
@@ -100,7 +120,7 @@ namespace SensingTexAPI
 
             buttons[row, column].Text = psiValue.ToString();
 
-            double psiAvg = 0;
+            //averagePSICalc(row, column, value);
 
 
             // code for displaying raw data values
@@ -126,7 +146,7 @@ namespace SensingTexAPI
             changeLEDCB ac = new changeLEDCB(changeLEDDirect);
             this.Invoke(ac, new object[] {});
         }
-
+ 
         private Color colorFromValue(int data, int threshold, int maxValue)
         {
             Color returnColor;
@@ -253,6 +273,16 @@ namespace SensingTexAPI
         }
 
         private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label8_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
         }
