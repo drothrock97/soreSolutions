@@ -22,6 +22,7 @@ namespace SensingTexAPI
         public static int age = 0;
         public static int height = 0;
         public static int weight = 0;
+        public static int bmi;
         public static bool painting = false;
 
         public formMain()
@@ -33,8 +34,11 @@ namespace SensingTexAPI
 
             num_threshold.Value = 200;
             num_age.Value = 0;
-            num_height.Value = 0;
-            num_weight.Value = 0;
+            num_height.Value = 70;
+            num_weight.Value = 180;
+
+            bmi_calculated.Text = (703 * (int)num_weight.Value / ((int)num_height.Value * (int)num_height.Value)).ToString();
+
 
             for (int i = 0; i<ROWS; i++)
                 for (int j = 0; j<COLS; j++)
@@ -87,8 +91,14 @@ namespace SensingTexAPI
         delegate void assignColorCB(int row, int column, int value);
         private void assignColorDirect(int row, int column, int value)
         {
-            buttons[row, column].Text = value.ToString();
             buttons[row, column].BackColor = colorFromValue(value,threshold, 4096);
+
+            // Converting digital value to PSI value
+            double psiValue = 0.00573*System.Math.Exp(0.00239*value);
+            psiValue = (double)System.Math.Round(psiValue, 2);
+            buttons[row, column].Text = psiValue.ToString();
+
+            //buttons[row, column].Text = value.ToString();
         }
 
         private void assignColor(int row, int column, int value)
@@ -200,11 +210,30 @@ namespace SensingTexAPI
         private void num_weight_ValueChanged(object sender, EventArgs e)
         {
             weight = (int)num_weight.Value;
+            try
+            {
+                bmi_calculated.Text = (703 * (int)num_weight.Value / ((int)num_height.Value * (int)num_height.Value)).ToString();
+
+            }
+            catch
+            {
+
+            }
         }
 
         private void num_height_ValueChanged(object sender, EventArgs e)
         {
             height = (int)num_height.Value;
+            weight = (int)num_weight.Value;
+            try
+            {
+                bmi_calculated.Text = (703 * (int)num_weight.Value / ((int)num_height.Value * (int)num_height.Value)).ToString();
+
+            }
+            catch
+            {
+
+            }
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -213,6 +242,11 @@ namespace SensingTexAPI
         }
 
         private void formMain_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
         {
 
         }

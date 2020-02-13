@@ -46,6 +46,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
+            this.bmi_calculated = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.num_threshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_age)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_height)).BeginInit();
@@ -241,12 +243,34 @@
             this.label6.TabIndex = 11;
             this.label6.Text = "Weight";
             // 
+            // bmi_calculated
+            // 
+            this.bmi_calculated.Location = new System.Drawing.Point(1206, 761);
+            this.bmi_calculated.Margin = new System.Windows.Forms.Padding(6);
+            this.bmi_calculated.Name = "bmi_calculated";
+            this.bmi_calculated.ReadOnly = true;
+            this.bmi_calculated.Size = new System.Drawing.Size(162, 29);
+            this.bmi_calculated.TabIndex = 12;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(1207, 730);
+            this.label7.Margin = new System.Windows.Forms.Padding(6, 0, 6, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(48, 25);
+            this.label7.TabIndex = 13;
+            this.label7.Text = "BMI";
+            this.label7.Click += new System.EventHandler(this.label7_Click);
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(1388, 1224);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.bmi_calculated);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label5);
@@ -270,7 +294,7 @@
             this.Margin = new System.Windows.Forms.Padding(6);
             this.MaximizeBox = false;
             this.Name = "formMain";
-            this.Text = "SoreSolutions vA01";
+            this.Text = "SoreSolutions";
             this.Load += new System.EventHandler(this.formMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.num_threshold)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_age)).EndInit();
@@ -280,6 +304,7 @@
             this.PerformLayout();
 
         }
+
 
         #endregion
 
@@ -300,6 +325,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox bmi_calculated;
+        private System.Windows.Forms.Label label7;
     }
 }
 

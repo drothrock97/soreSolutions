@@ -1,0 +1,34 @@
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\obj\x86\Debug\SensingTexAPI.formMain.resources
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\obj\x86\Debug\SensingTexAPI.Properties.Resources.resources
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csproj.GenerateResource.Cache
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\bin\Debug\SensingTexAPI.exe
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\bin\Debug\SensingTexAPI.pdb
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\obj\x86\Debug\SensingTexAPI.exe
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\obj\x86\Debug\SensingTexAPI.pdb
+C:\Users\admin\Desktop\API_VS\SensingTexAPI\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csprojResolveAssemblyReference.cache
+C:\Users\admin\Desktop\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.exe
+C:\Users\admin\Desktop\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.pdb
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.exe
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.pdb
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\bin\Debug\SensingTexAPI.exe
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\bin\Debug\SensingTexAPI.pdb
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csprojResolveAssemblyReference.cache
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.formMain.resources
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.Properties.Resources.resources
+C:\Users\admin\Desktop\STX API\Sensing Tex Windows API\SensingTexAPI\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csproj.GenerateResource.Cache
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\bin\Debug\SensingTexAPI.exe
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\bin\Debug\SensingTexAPI.pdb
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csprojAssemblyReference.cache
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.formMain.resources
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.Properties.Resources.resources
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csproj.GenerateResource.cache
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.exe
+C:\Users\Derek\Desktop\OriginalSensingTex\SensingTexSourceCode\EXAMPLE C#\SensingTexAPI\obj\x86\Debug\SensingTexAPI.pdb
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\bin\Debug\SensingTexAPI.exe
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\bin\Debug\SensingTexAPI.pdb
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csprojAssemblyReference.cache
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\obj\x86\Debug\SensingTexAPI.formMain.resources
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\obj\x86\Debug\SensingTexAPI.Properties.Resources.resources
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\obj\x86\Debug\SensingTexAPI.csproj.GenerateResource.cache
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\obj\x86\Debug\SensingTexAPI.exe
+C:\Users\Derek\Source\Repos\soreSolutions\SensingTexAPI\obj\x86\Debug\SensingTexAPI.pdb
