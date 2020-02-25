@@ -23,7 +23,6 @@ namespace SensingTexAPI
         public static int height = 0;
         public static int weight = 0;
         public static int bmi;
-        public static int timeLeft = 5;
         public static bool painting = false;
 
         public formMain()
@@ -195,9 +194,17 @@ namespace SensingTexAPI
                 sensor.StartDevice();
 
                 if (sensor.IsOpen())
+                {
                     this.btn_ledConnected.BackColor = Color.Green;
+                    timeLeft = 30;
+                    timeLabel.Text = timeLeft + " minutes";
+                    timer1.Start();
+                }
+                    
                 else
+                {
                     this.btn_ledConnected.BackColor = Color.Red;
+                }
             }
             catch (Exception ex)
             {
@@ -211,6 +218,8 @@ namespace SensingTexAPI
                 sensor.StopDevice();
                 if (sensor.Stop())
                 {
+                    timeLabel.Text = "Connect to Start";
+                    timer1.Stop();
                 }
 
                 if (sensor.IsStart())
@@ -290,7 +299,6 @@ namespace SensingTexAPI
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            timer1.Start();
             if (timeLeft > 0)
             {
                 // Display the amount of time left
