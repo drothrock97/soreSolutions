@@ -316,7 +316,6 @@
             this.timeLabel.Size = new System.Drawing.Size(162, 29);
             this.timeLabel.TabIndex = 16;
             this.timeLabel.Text = "Connect to Start";
-            //this.timeLabel.TextChanged += new System.EventHandler(this.textBox1_TextChanged_1);
             // 
             // formMain
             // 

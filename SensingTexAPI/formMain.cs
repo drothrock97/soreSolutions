@@ -78,7 +78,10 @@ namespace SensingTexAPI
 
                 for (int i = 0; i < ROWS; i++)
                     for (int j = 0; j < COLS; j++)
+                    {
                         assignColor(i, j, (int)copyData[i, j]);
+                        averageMaxPSI(i, j, (int)copyData[i, j]);
+                    }
 
                 formMain.painting = false;
             }
@@ -90,24 +93,59 @@ namespace SensingTexAPI
 
         delegate void assignColorCB(int row, int column, int value);
 
-        public void averagePSICalc(int row, int column, int value)
+        private void averageMaxPSI(int row, int column, int value)
         {
-            double[] dataArray = { row, column, value };
-            double sum = 0;
-            double avg = 0;
-            int nValues = 0;
-            for (int k = 0; k<row; k++)
-                for (int j = 0; j<column; j++)
-                {
-                    if (value > threshold)
-                    {
-                        sum += dataArray[value];
-                        nValues++;
+            // Converting digital value to PSI value using calculated
+            double psiValue = 0.00573 * System.Math.Exp(0.00239 * value);
 
+            //creating data array
+            int [,] rawData = new int[ROWS, COLS];
+            for (int i = 0; i < ROWS; i++)
+                for (int j = 0; j < COLS; j++)
+                    rawData[i,j] = value;
+            //Finding absolute max
+            int maxPSI = 0;
+            int maxRow = 0;
+            int maxCol = 0;
+            for (int i = 0; i < ROWS; i++)
+                for (int j = 0; j < COLS; j++)
+                {
+                    if (rawData[i, j] > maxPSI)
+                    {
+                        maxPSI = rawData[i, j];
+                        maxRow = i;
+                        maxCol = j;
                     }
                 }
-            avg = sum / nValues;
-            averagePSIText.Text = avg.ToString();
+            //Finding average of local area near max
+            int bottomRow = maxRow++;
+            int topRow = maxRow--;
+            int leftCol = maxCol--;
+            int rightCol = maxCol++;
+            int totalPSI = 0;
+            int nSensors;
+            double avgPSI;
+
+            if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
+                avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[bottomRow, maxCol] + rawData[maxRow, leftCol] + rawData[maxRow, rightCol]) / 5;
+            else if (topRow < 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
+                avgPSI = (maxPSI + rawData[bottomRow, maxCol] + rawData[maxRow, leftCol] + rawData[maxRow, rightCol]) / 4;
+            else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol <= COLS)
+                avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[maxRow, leftCol] + rawData[maxRow, rightCol]) / 4;
+            else if (topRow >= 0 && bottomRow <= ROWS && leftCol < 0 && rightCol <= COLS)
+                avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[bottomRow, maxCol] + rawData[maxRow, rightCol]) / 4;
+            else if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol > COLS)
+                avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[bottomRow, maxCol] + rawData[maxRow, leftCol]) / 4;
+            else if (topRow < 0 && bottomRow <= ROWS && leftCol < 0 && rightCol <= COLS)
+                avgPSI = (maxPSI + rawData[bottomRow, maxCol] + rawData[maxRow, rightCol]) / 3;
+            else if (topRow < 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol > COLS)
+                avgPSI = (maxPSI + rawData[bottomRow, maxCol] + rawData[maxRow, leftCol]) / 3;
+            else if (topRow >= 0 && bottomRow > ROWS && leftCol < 0 && rightCol <= COLS)
+                avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[maxRow, rightCol]) / 3;
+            else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol > COLS)
+                avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[maxRow, leftCol]) / 3;
+
+            
         }
         private void assignColorDirect(int row, int column, int value)
         {
