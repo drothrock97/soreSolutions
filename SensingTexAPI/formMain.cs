@@ -80,8 +80,47 @@ namespace SensingTexAPI
                     for (int j = 0; j < COLS; j++)
                     {
                         assignColor(i, j, (int)copyData[i, j]);
-                        averageMaxPSI(i, j, (int)copyData[i, j]);
+                        
                     }
+
+                if (timePassed % 30 == 0)
+                {
+                    //Finding absolute max
+                    double maxPSI = 0;
+                    int maxRow = 0;
+                    int maxCol = 0;
+                    for (int i = 0; i < ROWS; i++)
+                        for (int j = 0; j < COLS; j++)
+                        {
+                            if (copyData[i, j] > maxPSI)
+                            {
+                                maxPSI = copyData[i, j];
+                                maxRow = i;
+                                maxCol = j;
+                            }
+                        }
+                    //Finding average of local area near max
+                    int bottomRow = maxRow++;
+                    int topRow = maxRow--;
+                    int leftCol = maxCol--;
+                    int rightCol = maxCol++;
+                    double totalPSI = 0;
+                    double nSensors = 0;
+                    double avgPSI = 0;
+
+                    for (int i = maxRow - 1; i < maxRow + 1; i++)
+                        for (int j = maxCol - 1; j < maxCol + 1; j++)
+                            if (copyData[i, j] > 0)
+                            {
+                                totalPSI += copyData[i, j];
+                                nSensors++;
+                            }
+                    avgPSI = totalPSI / nSensors;
+
+                    // Converting digital value to PSI value using calculated
+                    double calcAvgPSI = 0.00573 * System.Math.Exp(0.00239 * avgPSI);
+                    averagePSIText.Text = calcAvgPSI.ToString();
+                }
 
                 formMain.painting = false;
             }
@@ -95,8 +134,7 @@ namespace SensingTexAPI
 
         private void averageMaxPSI(int row, int column, int value)
         {
-            // Converting digital value to PSI value using calculated
-            double psiValue = 0.00573 * System.Math.Exp(0.00239 * value);
+            
 
             //creating data array
             int [,] rawData = new int[ROWS, COLS];
@@ -124,7 +162,7 @@ namespace SensingTexAPI
             int rightCol = maxCol++;
             int totalPSI = 0;
             int nSensors;
-            double avgPSI;
+            double avgPSI = 0;
 
             if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
                 avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[bottomRow, maxCol] + rawData[maxRow, leftCol] + rawData[maxRow, rightCol]) / 5;
@@ -145,7 +183,11 @@ namespace SensingTexAPI
             else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol > COLS)
                 avgPSI = (maxPSI + rawData[topRow, maxCol] + rawData[maxRow, leftCol]) / 3;
 
-            
+            // Converting digital value to PSI value using calculated
+            double calcAvgPSI = 0.00573 * System.Math.Exp(0.00239 * avgPSI);
+            averagePSIText.Text = calcAvgPSI.ToString();
+
+
         }
         private void assignColorDirect(int row, int column, int value)
         {
@@ -235,8 +277,10 @@ namespace SensingTexAPI
                 {
                     this.btn_ledConnected.BackColor = Color.Green;
                     timeLeft = 30;
+                    timePassed = 0;
                     timeLabel.Text = timeLeft + " minutes";
                     timer1.Start();
+                    elapsedTime.Start();
                 }
                     
                 else
@@ -258,6 +302,7 @@ namespace SensingTexAPI
                 {
                     timeLabel.Text = "Connect to Start";
                     timer1.Stop();
+                    elapsedTime.Stop();
                 }
 
                 if (sensor.IsStart())
@@ -332,7 +377,7 @@ namespace SensingTexAPI
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
-
+        
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -348,6 +393,13 @@ namespace SensingTexAPI
                 timer1.Stop();
                 timeLabel.Text = ("You are at risk of a pressure sore");
             }
+        }
+
+        private void elapsedTime_Tick(object sender, EventArgs e)
+        {
+
+                timePassed = timePassed + 1;
+
         }
 
         private void label9_Click(object sender, EventArgs e)

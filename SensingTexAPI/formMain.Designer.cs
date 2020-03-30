@@ -3,6 +3,7 @@
     partial class formMain
     {
         int timeLeft;
+        int timePassed;
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -55,6 +56,7 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.label9 = new System.Windows.Forms.Label();
             this.timeLabel = new System.Windows.Forms.TextBox();
+            this.elapsedTime = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.num_threshold)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_age)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.num_height)).BeginInit();
@@ -317,6 +319,11 @@
             this.timeLabel.TabIndex = 16;
             this.timeLabel.Text = "Connect to Start";
             // 
+            // elapsedTime
+            // 
+            this.elapsedTime.Interval = 1000;
+            this.elapsedTime.Tick += new System.EventHandler(this.elapsedTime_Tick);
+            // 
             // formMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 24F);
@@ -390,6 +397,7 @@
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox timeLabel;
+        private System.Windows.Forms.Timer elapsedTime;
     }
 }
 
