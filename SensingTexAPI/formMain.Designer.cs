@@ -321,7 +321,7 @@
             // 
             // elapsedTime
             // 
-            this.elapsedTime.Interval = 1000;
+            this.elapsedTime.Interval = 60000;
             this.elapsedTime.Tick += new System.EventHandler(this.elapsedTime_Tick);
             // 
             // formMain

@@ -83,12 +83,37 @@ namespace SensingTexAPI
                         
                     }
 
-                if (timePassed % 30 == 0)
+                // BMI factor
+                int calcBMI = (703 * (int)num_weight.Value / ((int)num_height.Value * (int)num_height.Value));
+                double bmiConstant = 0;
+                if (calcBMI > 30 || calcBMI < 18)
+                    bmiConstant = 0.7;
+                else if (calcBMI > 26 && calcBMI < 30)
+                    bmiConstant = 0.8;
+                else
+                    bmiConstant = 1;
+
+                // Age factor
+                int ageInput = (int)num_age.Value;
+                double ageConstant;
+                if (ageInput > 65)
+                    ageConstant = 0.9;
+                else
+                    ageConstant = 1;
+
+                double maxPSI = 0;
+                int maxRow = 0;
+                int maxCol = 0;
+                double totalPSI = 0;
+                double nSensors = 0;
+                double avgPSI = 0;
+                double calcOnsetTime = 0;
+                double adjustedTime = 0;
+                double tempTime = 0;
+                if (timePassed % 0.5 == 0)
                 {
                     //Finding absolute max
-                    double maxPSI = 0;
-                    int maxRow = 0;
-                    int maxCol = 0;
+                    
                     for (int i = 0; i < ROWS; i++)
                         for (int j = 0; j < COLS; j++)
                         {
@@ -100,10 +125,6 @@ namespace SensingTexAPI
                             }
                         }
                     //Finding average of local area near max
-                    double totalPSI = 0;
-                    double nSensors = 0;
-                    double avgPSI = 0;
-
                     for (int i = maxRow - 1; i < maxRow + 1; i++)
                         for (int j = maxCol - 1; j < maxCol + 1; j++)
                             if (copyData[i, j] > 0)
@@ -121,19 +142,21 @@ namespace SensingTexAPI
                     double kpaAvg = 6.89476 * calcAvgPSI;
 
                     // Calculates onset time based on sigmoid function equation Linder-Ganz 2006
-                    double calcOnsetTime = (20 / 3) * System.Math.Log((32 * System.Math.Exp(27 / 2) - kpaAvg * System.Math.Exp(27 / 2)) / (kpaAvg - 9));
-                    double tempTime = 0;
+                    calcOnsetTime = (20 / 3) * System.Math.Log((32 * System.Math.Exp(27 / 2) - kpaAvg * System.Math.Exp(27 / 2)) / (kpaAvg - 9));
 
-                    timeLeft = (int)calcOnsetTime * bmi;
 
-                    if (timeLeft + timePassed < calcOnsetTime)
+
+                    // Adjusted time remaining
+                    adjustedTime = (calcOnsetTime * bmiConstant * ageConstant);
+
+                    if (timeLeft + timePassed < adjustedTime)
                     {
+                        timeLeft = (int)adjustedTime;
                         timeLabel.Text = timeLeft.ToString() + " minutes";
-                        tempTime = timeLeft;
                     }
-                 
-
                 }
+
+                
 
                 formMain.painting = false;
             }
@@ -289,9 +312,7 @@ namespace SensingTexAPI
                 if (sensor.IsOpen())
                 {
                     this.btn_ledConnected.BackColor = Color.Green;
-                    timeLeft = 30;
                     timePassed = 0;
-                    timeLabel.Text = timeLeft + " minutes";
                     timer1.Start();
                     elapsedTime.Start();
                 }
@@ -341,7 +362,6 @@ namespace SensingTexAPI
 
         private void num_weight_ValueChanged(object sender, EventArgs e)
         {
-            weight = (int)num_weight.Value;
             try
             {
                 bmi_calculated.Text = (703 * (int)num_weight.Value / ((int)num_height.Value * (int)num_height.Value)).ToString();
@@ -395,7 +415,7 @@ namespace SensingTexAPI
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (timeLeft > 0)
+            if (timeLeft > 52)
             {
                 // Display the amount of time left
                 timeLeft = timeLeft - 1;
