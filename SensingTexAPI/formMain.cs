@@ -100,10 +100,6 @@ namespace SensingTexAPI
                             }
                         }
                     //Finding average of local area near max
-                    int bottomRow = maxRow++;
-                    int topRow = maxRow--;
-                    int leftCol = maxCol--;
-                    int rightCol = maxCol++;
                     double totalPSI = 0;
                     double nSensors = 0;
                     double avgPSI = 0;
@@ -120,6 +116,23 @@ namespace SensingTexAPI
                     // Converting digital value to PSI value using calculated
                     double calcAvgPSI = 0.00573 * System.Math.Exp(0.00239 * avgPSI);
                     averagePSIText.Text = calcAvgPSI.ToString();
+
+                    // Converts PSI to kPa for time calculation
+                    double kpaAvg = 6.89476 * calcAvgPSI;
+
+                    // Calculates onset time based on sigmoid function equation Linder-Ganz 2006
+                    double calcOnsetTime = (20 / 3) * System.Math.Log((32 * System.Math.Exp(27 / 2) - kpaAvg * System.Math.Exp(27 / 2)) / (kpaAvg - 9));
+                    double tempTime = 0;
+
+                    timeLeft = (int)calcOnsetTime * bmi;
+
+                    if (timeLeft + timePassed < calcOnsetTime)
+                    {
+                        timeLabel.Text = timeLeft.ToString() + " minutes";
+                        tempTime = timeLeft;
+                    }
+                 
+
                 }
 
                 formMain.painting = false;
