@@ -76,7 +76,9 @@ namespace SensingTexAPI
 	}
 
 
-
+	// This is where simulation profiles can be found
+	// Adding additional simulation profiles or modifying current profiles
+	// can be done by copying and modyfying the simulaiton functions
 	public class MattressDevice
 	{
 		enum ReadDataState
