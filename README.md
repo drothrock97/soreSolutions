@@ -8,3 +8,5 @@ The formMain.Designer.cs file is used for adding/removing user inputs or timers 
 
 The formMain.cs file is where all calculations and analyses occur.
 
+Simulation profiles are found in the MattressDevice.cs file.
+
