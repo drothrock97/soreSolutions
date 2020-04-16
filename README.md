@@ -10,3 +10,6 @@ The formMain.cs file is where all calculations and analyses occur.
 
 Simulation profiles are found in the MattressDevice.cs file.
 
+To see changes reflected in the application, you must first build the solution.
+Afterwards, the application can be found in the SensingTexAPI>bin>Debug folder.
+
