@@ -9,6 +9,10 @@ The formMain.Designer.cs file is used for adding/removing user inputs or timers 
 The formMain.cs file is where all calculations and analyses occur.
 
 Simulation profiles are found in the MattressDevice.cs file.
+To use a simulation profile, set the input port as the profile name.
+SIM produces random values for all locations.
+SETSIM produces specified values in a square shape.
+BSIM produces a more anitomically relavent signal.
 
 To see changes reflected in the application, you must first build the solution.
 Afterwards, the application can be found in the SensingTexAPI>bin>Debug folder.
