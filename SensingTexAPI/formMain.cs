@@ -137,35 +137,35 @@ namespace SensingTexAPI
                     int leftCol = maxCol--;
                     int rightCol = maxCol++;
 
-                    if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
-                        avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol] + copyData[maxRow, rightCol]) / 5;
-                    else if (topRow < 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
-                        avgPSI = (maxPSI + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol] + copyData[maxRow, rightCol]) / 4;
-                    else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol <= COLS)
-                        avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[maxRow, leftCol] + copyData[maxRow, rightCol]) / 4;
-                    else if (topRow >= 0 && bottomRow <= ROWS && leftCol < 0 && rightCol <= COLS)
-                        avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[bottomRow, maxCol] + copyData[maxRow, rightCol]) / 4;
-                    else if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol > COLS)
-                        avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol]) / 4;
-                    else if (topRow < 0 && bottomRow <= ROWS && leftCol < 0 && rightCol <= COLS)
-                        avgPSI = (maxPSI + copyData[bottomRow, maxCol] + copyData[maxRow, rightCol]) / 3;
-                    else if (topRow < 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol > COLS)
-                        avgPSI = (maxPSI + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol]) / 3;
-                    else if (topRow >= 0 && bottomRow > ROWS && leftCol < 0 && rightCol <= COLS)
-                        avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[maxRow, rightCol]) / 3;
-                    else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol > COLS)
-                        avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[maxRow, leftCol]) / 3;
+                    //if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
+                    //    avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol] + copyData[maxRow, rightCol]) / 5;
+                    //else if (topRow < 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol <= COLS)
+                    //    avgPSI = (maxPSI + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol] + copyData[maxRow, rightCol]) / 4;
+                    //else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol <= COLS)
+                    //    avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[maxRow, leftCol] + copyData[maxRow, rightCol]) / 4;
+                    //else if (topRow >= 0 && bottomRow <= ROWS && leftCol < 0 && rightCol <= COLS)
+                    //    avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[bottomRow, maxCol] + copyData[maxRow, rightCol]) / 4;
+                    //else if (topRow >= 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol > COLS)
+                    //    avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol]) / 4;
+                    //else if (topRow < 0 && bottomRow <= ROWS && leftCol < 0 && rightCol <= COLS)
+                    //    avgPSI = (maxPSI + copyData[bottomRow, maxCol] + copyData[maxRow, rightCol]) / 3;
+                    //else if (topRow < 0 && bottomRow <= ROWS && leftCol >= 0 && rightCol > COLS)
+                    //    avgPSI = (maxPSI + copyData[bottomRow, maxCol] + copyData[maxRow, leftCol]) / 3;
+                    //else if (topRow >= 0 && bottomRow > ROWS && leftCol < 0 && rightCol <= COLS)
+                    //    avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[maxRow, rightCol]) / 3;
+                    //else if (topRow >= 0 && bottomRow > ROWS && leftCol >= 0 && rightCol > COLS)
+                    //    avgPSI = (maxPSI + copyData[topRow, maxCol] + copyData[maxRow, leftCol]) / 3;
 
                     // This is another method of calculating average localized PSI
                     // For some reason, it is not accurate, but not sure why...
-                    //for (int i = maxRow - 1; i < maxRow + 1; i++)
-                    //    for (int j = maxCol - 1; j < maxCol + 1; j++)
-                    //        if (copyData[i, j] > 0)
-                    //        {
-                    //            totalPSI += copyData[i, j];
-                    //            nSensors++;
-                    //        }
-                    //avgPSI = totalPSI / nSensors;
+                    for (int i = maxRow - 1; i < maxRow + 1; i++)
+                        for (int j = maxCol - 1; j < maxCol + 1; j++)
+                            if (copyData[i, j] > 0)
+                            {
+                                totalPSI += copyData[i, j];
+                                nSensors++;
+                            }
+                    avgPSI = totalPSI / nSensors;
 
                     // Converting digital value to PSI value using calculated
                     // Based on Calibration. Should be changed after future calibrations

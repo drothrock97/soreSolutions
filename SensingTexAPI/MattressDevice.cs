@@ -11,12 +11,12 @@ using System.Threading;
 
 namespace SensingTexAPI
 {
-    //Class for the data associated to DataReadyEvent
+	//Class for the data associated to DataReadyEvent
 	public class DataReadyEventArgs : EventArgs
 	{
 		public double[,] Data { get; internal set; }
 
-        public DataReadyEventArgs(double[,] data)
+		public DataReadyEventArgs(double[,] data)
 		{
 			Data = data;
 		}
@@ -76,9 +76,7 @@ namespace SensingTexAPI
 	}
 
 
-	// This is where simulation profiles can be found
-	// Adding additional simulation profiles or modifying current profiles
-	// can be done by copying and modyfying the simulaiton functions
+
 	public class MattressDevice
 	{
 		enum ReadDataState
@@ -90,96 +88,105 @@ namespace SensingTexAPI
 			END_OF_LINE,
 			EXIT,
 			DATA_READY,
-			ERROR}
+			ERROR
+		}
 		;
 
-        //EVENT
-        //Raised at each complete reception of data from the SDK
-        public event EventHandler<DataReadyEventArgs> DataReadyEvent;
+		//EVENT
+		//Raised at each complete reception of data from the SDK
+		public event EventHandler<DataReadyEventArgs> DataReadyEvent;
 
-        //serial port for communications with SDK
+		//serial port for communications with SDK
 		private SerialPort port;
-        private string portName = "";
-        private bool portOpen = false;
-        private bool started = false;
-        private double Period = 0;
-        private double[,] tmpData;
-        private double[,] Data;
+		private string portName = "";
+		private bool portOpen = false;
+		private bool started = false;
+		private double Period = 0;
+		private double[,] tmpData;
+		private double[,] Data;
 
-        //SENSOR
-        //number of rows and columns. Usually 16x16 or 8x8
+		//SENSOR
+		//number of rows and columns. Usually 16x16 or 8x8
 		private int Rows = 0;
 		private int Columns = 0;
-        //min and max values expected to read
-        private double maximoAceptado = 4095;
+		//min and max values expected to read
+		private double maximoAceptado = 4095;
 		private double minimoAceptado = 1;
-        public double minValue{
-            get{
-                return minimoAceptado;
-            }set{
-                minimoAceptado = value;
-            }
-        }
-        public double maxValue{
-            get{
-                return maximoAceptado;
-            }set{
-                maximoAceptado = value;
-            }
-        }
+		public double minValue
+		{
+			get
+			{
+				return minimoAceptado;
+			}
+			set
+			{
+				minimoAceptado = value;
+			}
+		}
+		public double maxValue
+		{
+			get
+			{
+				return maximoAceptado;
+			}
+			set
+			{
+				maximoAceptado = value;
+			}
+		}
 
-        //number of columns and rows received from SDK
-        public int numRowsRx;
-        public int numColsRx;
+		//number of columns and rows received from SDK
+		public int numRowsRx;
+		public int numColsRx;
 
-        //simulation configuration
-        private Timer simulationTimer;
-        private Timer detectPortTimer;
+		//simulation configuration
+		private Timer simulationTimer;
+		private Timer detectPortTimer;
 
-        
-        //CONSTRUCTOR
-        //rows: number of rows of the sensor (16 default)
-        //columns: number of columns of the sensor (16 default)
-        //period: period of data recepction. Accepted values: 0.1, 1, 10 (only useful with SDK Premium)
+
+		//CONSTRUCTOR
+		//rows: number of rows of the sensor (16 default)
+		//columns: number of columns of the sensor (16 default)
+		//period: period of data recepction. Accepted values: 0.1, 1, 10 (only useful with SDK Premium)
 		public MattressDevice(int rows, int columns, double period)
 		{
-            //Serial port 
+			//Serial port 
 			port = new SerialPort();
 			port.DataReceived += OnDataReceived;
 			port.ErrorReceived += OnErrorReceived;
 
-            //sensor conf
+			//sensor conf
 			Rows = rows;
 			Columns = columns;
 			Period = period;
 
-            //data structures
+			//data structures
 			Data = new double[rows, columns];
 			tmpData = new double[rows, columns];
 
-            //event configuration
+			//event configuration
 			DataReadyEvent = null;
 
 			return;
 		}
 
-        //Sets the min and max values
+		//Sets the min and max values
 		public void setMinMax(int min, int max)
 		{
 			minValue = min;
 			maxValue = max;
 		}
-			
-        /// <summary>
-        /// Open the serial port.
-        /// In SDK Standard it begins the data reception.
-        /// In SDK Premium it only opens the port.
-        /// </summary>
-        /// <param name="portName">Port name in "COMxx" format. For a random data test you can open a "SIM" port, where no SDK is needed.</param>
-        /// <returns></returns>
+
+		/// <summary>
+		/// Open the serial port.
+		/// In SDK Standard it begins the data reception.
+		/// In SDK Premium it only opens the port.
+		/// </summary>
+		/// <param name="portName">Port name in "COMxx" format. For a random data test you can open a "SIM" port, where no SDK is needed.</param>
+		/// <returns></returns>
 		public bool Open(string portName)
 		{
-			if (portName != "SIM" && portName != "SETSIM")
+			if (portName != "SIM" && portName != "SETSIM" && portName != "BSIM")
 			{
 				if (port == null || portName == null)
 					return false;
@@ -195,7 +202,8 @@ namespace SensingTexAPI
 				try
 				{
 					port.Open();
-				} catch (Exception e)
+				}
+				catch (Exception e)
 				{
 					Console.WriteLine("Open Port: " + e.Message);
 					return false;
@@ -205,7 +213,7 @@ namespace SensingTexAPI
 				{
 					return false;
 				}
-				
+
 				port.ReadTimeout = 100;
 				port.WriteTimeout = 100;
 				port.ReceivedBytesThreshold = (4 + 2 * Rows); // 1 row packet size
@@ -231,12 +239,12 @@ namespace SensingTexAPI
 			return true;
 		}
 
-        //Close the port and stops the data reception
+		//Close the port and stops the data reception
 		public void Close()
 		{
 			portOpen = false;
 
-			if (portName == "SIM" || portName == "SETSIM")
+			if (portName == "SIM" || portName == "SETSIM" || portName == "BSIM")
 			{
 				this.Stop();
 			}
@@ -254,12 +262,12 @@ namespace SensingTexAPI
 
 			Console.WriteLine(port.PortName + " Closed");
 		}
-			
-        /// <summary>
-        /// Starts the data reception.
-        /// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
-        /// </summary>
-        /// <returns>true: accepted. false: denied</returns>
+
+		/// <summary>
+		/// Starts the data reception.
+		/// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
+		/// </summary>
+		/// <returns>true: accepted. false: denied</returns>
 		public bool Start()
 		{
 			bool tmp;
@@ -274,6 +282,11 @@ namespace SensingTexAPI
 				StopDevice();
 				tmp = StartSetSimulation();
 			}
+			else if (portName == "BSIM")
+			{
+				StopDevice();
+				tmp = StartBSimulation();
+			}
 			else
 			{
 				StopSimulation();
@@ -283,16 +296,16 @@ namespace SensingTexAPI
 			return tmp;
 		}
 
-        /// <summary>
-        /// Stops the data reception.
-        /// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
-        /// </summary>
-        /// <returns>true: accepted. false: refused</returns>
+		/// <summary>
+		/// Stops the data reception.
+		/// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
+		/// </summary>
+		/// <returns>true: accepted. false: refused</returns>
 		public bool Stop()
 		{
 			bool tmp;
 
-			if (portName == "SIM" || portName == "SETSIM")
+			if (portName == "SIM" || portName == "SETSIM" || portName == "BSIM")
 			{
 				StopDevice();
 				tmp = StopSimulation();
@@ -306,13 +319,13 @@ namespace SensingTexAPI
 			return tmp;
 		}
 
-        /// <summary>
-        /// Starts the data simulation for port "SIM"
-        /// </summary>
-        /// <returns>always true</returns>
+		/// <summary>
+		/// Starts the data simulation for port "SIM"
+		/// </summary>
+		/// <returns>always true</returns>
 		public bool StartSimulation()
 		{
-			simulationTimer = new Timer(new TimerCallback(OnSimulationTimerEvent), null, 0, (int) (1000 * Period));
+			simulationTimer = new Timer(new TimerCallback(OnSimulationTimerEvent), null, 0, (int)(1000 * Period));
 			started = true;
 
 			return true;
@@ -321,6 +334,14 @@ namespace SensingTexAPI
 		public bool StartSetSimulation()
 		{
 			simulationTimer = new Timer(new TimerCallback(OnSetSimulationTimerEvent), null, 0, (int)(1000 * Period));
+			started = true;
+
+			return true;
+		}
+
+		public bool StartBSimulation()
+		{
+			simulationTimer = new Timer(new TimerCallback(OnBSimulationTimerEvent), null, 0, (int)(1000 * Period));
 			started = true;
 
 			return true;
@@ -339,11 +360,11 @@ namespace SensingTexAPI
 		}
 
 
-        /// <summary>
-        /// Send to the SDK the "start sending data" command.
-        /// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Send to the SDK the "start sending data" command.
+		/// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
+		/// </summary>
+		/// <returns></returns>
 		public bool StartDevice()
 		{
 			detectPortTimer = new Timer(new TimerCallback(OnDetectPortTimerEvent), null, 0, 1000);
@@ -353,13 +374,14 @@ namespace SensingTexAPI
 
 			byte[] buffer = new byte[2];
 
-			buffer[0] = (byte) 'S';
-			buffer[1] = (byte) '\r';
+			buffer[0] = (byte)'S';
+			buffer[1] = (byte)'\r';
 
 			try
 			{
 				port.Write(buffer, 0, 2);
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				Console.WriteLine("Start " + ex.Message);
 				return false;
@@ -370,11 +392,11 @@ namespace SensingTexAPI
 			return true;
 		}
 
-        /// <summary>
-        /// Send to the SDK the "stop sending data" command.
-        /// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Send to the SDK the "stop sending data" command.
+		/// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
+		/// </summary>
+		/// <returns></returns>
 		public bool StopDevice()
 		{
 			if (detectPortTimer != null)
@@ -385,13 +407,14 @@ namespace SensingTexAPI
 
 			byte[] buffer = new byte[2];
 
-			buffer[0] = (byte) 'X';
-			buffer[1] = (byte) '\r';
+			buffer[0] = (byte)'X';
+			buffer[1] = (byte)'\r';
 
 			try
 			{
 				port.Write(buffer, 0, 2);
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				Console.WriteLine("Stop " + ex.Message);
 				return false;
@@ -402,21 +425,21 @@ namespace SensingTexAPI
 			return true;
 		}
 
-        /// <summary>
-        /// Informs wheter the SDK is sending data or not.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Informs wheter the SDK is sending data or not.
+		/// </summary>
+		/// <returns></returns>
 		public bool IsStart()
 		{
 			return started;
 		}
 
-        /// <summary>
-        /// Sets the sending data period.
-        /// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
-        /// </summary>
-        /// <param name="period"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// Sets the sending data period.
+		/// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
+		/// </summary>
+		/// <param name="period"></param>
+		/// <returns></returns>
 		public bool SetPeriod(double period)
 		{
 			Period = period;
@@ -433,6 +456,11 @@ namespace SensingTexAPI
 					StopSimulation();
 					StartSetSimulation();
 				}
+				else if (portName == "BSIM")
+				{
+					StopSimulation();
+					StartBSimulation();
+				}
 				else
 				{
 					SendConfiguration();
@@ -441,26 +469,27 @@ namespace SensingTexAPI
 			return true;
 		}
 
-        /// <summary>
-        /// Sends to the SDK the sensor configuration.
-        /// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Sends to the SDK the sensor configuration.
+		/// Only useful in SDK Premium. If sended to SDK Standard it has no effect.
+		/// </summary>
+		/// <returns></returns>
 		private bool SendConfiguration()
 		{
 			byte[] buffer = new byte[6];
 
-			buffer[0] = (byte) 'C';
-			buffer[1] = (byte) Rows;
-			buffer[2] = (byte) Columns;
-			buffer[3] = (byte) ((int) (10 / Period) >> 8);
-			buffer[4] = (byte) ((int) (10 / Period));
-			buffer[5] = (byte) '\r';
+			buffer[0] = (byte)'C';
+			buffer[1] = (byte)Rows;
+			buffer[2] = (byte)Columns;
+			buffer[3] = (byte)((int)(10 / Period) >> 8);
+			buffer[4] = (byte)((int)(10 / Period));
+			buffer[5] = (byte)'\r';
 
 			try
 			{
 				port.Write(buffer, 0, 6);
-			} catch (Exception ex)
+			}
+			catch (Exception ex)
 			{
 				Console.WriteLine("SendConfiguration " + ex.Message);
 				return false;
@@ -469,19 +498,19 @@ namespace SensingTexAPI
 			return true;
 		}
 
-        /// <summary>
-        /// Returns port name
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Returns port name
+		/// </summary>
+		/// <returns></returns>
 		public string GetPortName()
 		{
 			return port.PortName;
 		}
 
-        /// <summary>
-        /// Read current available serial ports.
-        /// </summary>
-        /// <returns>A string array with the name of all available serial ports in the computer.</returns>
+		/// <summary>
+		/// Read current available serial ports.
+		/// </summary>
+		/// <returns>A string array with the name of all available serial ports in the computer.</returns>
 		public string[] GetAvailablePorts()
 		{
 			int i = 0;
@@ -497,37 +526,38 @@ namespace SensingTexAPI
 			}
 			ports[i] = "SIM";
 			ports[i] = "SETSIM";
+			ports[i] = "BSIM";
 
 			return ports;
 		}
 
-        /// <summary>
-        /// Returns true if the port is opened.
-        /// </summary>
-        /// <returns>true: opened. false: closed.</returns>
+		/// <summary>
+		/// Returns true if the port is opened.
+		/// </summary>
+		/// <returns>true: opened. false: closed.</returns>
 		public bool IsOpen()
 		{
-			if (portName == "SIM" || portName == "SETSIM")
+			if (portName == "SIM" || portName == "SETSIM" || portName == "BSIM")
 				return portOpen;
 
 			return port.IsOpen;
 		}
 
-        /// <summary>
-        /// Returns the last received data matrix.
-        /// </summary>
-        /// <returns>The same data matrix that is sended with the event DataReadyEvent</returns>
+		/// <summary>
+		/// Returns the last received data matrix.
+		/// </summary>
+		/// <returns>The same data matrix that is sended with the event DataReadyEvent</returns>
 		public double[,] GetData()
 		{
 			return this.Data;
 		}
 
-        /// <summary>
-        /// Returns the value of a specific point in the matrix
-        /// </summary>
-        /// <param name="row">row point</param>
-        /// <param name="col">column point</param>
-        /// <returns>The value of the point</returns>
+		/// <summary>
+		/// Returns the value of a specific point in the matrix
+		/// </summary>
+		/// <param name="row">row point</param>
+		/// <param name="col">column point</param>
+		/// <returns>The value of the point</returns>
 		public double GetCoordinate(int row, int col)
 		{
 			double retval;
@@ -544,32 +574,33 @@ namespace SensingTexAPI
 			return retval;
 		}
 
-        /// <summary>
-        /// Translates the value received into a useful 12bit number
-        /// </summary>
-        /// <param name="val">double read from the SDK</param>
-        /// <returns>a 12 bit number. 0:no pressure, 4095: max pressure</returns>
+		/// <summary>
+		/// Translates the value received into a useful 12bit number
+		/// </summary>
+		/// <param name="val">double read from the SDK</param>
+		/// <returns>a 12 bit number. 0:no pressure, 4095: max pressure</returns>
 		private double ConvertADCValue(int val)
 		{
 			double retval;
 
-			retval = (double) (4095 - val);
+			retval = (double)(4095 - val);
 
 			return retval;
 		}
 
-        /// <summary>
-        /// Reads a byte from the serial port
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads a byte from the serial port
+		/// </summary>
+		/// <returns></returns>
 		private int ReadByte()
 		{
 			int tmp;
 
 			try
 			{
-				tmp = (byte) port.ReadByte();
-			} catch (Exception)
+				tmp = (byte)port.ReadByte();
+			}
+			catch (Exception)
 			{
 				return -1;
 			}
@@ -577,10 +608,10 @@ namespace SensingTexAPI
 			return tmp;
 		}
 
-        /// <summary>
-        /// Receive the information from the SDK and controls the communication and data protocol.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Receive the information from the SDK and controls the communication and data protocol.
+		/// </summary>
+		/// <returns></returns>
 		private ReadDataState ReadData()
 		{
 			ReadDataState state = ReadDataState.COMMAND;
@@ -590,7 +621,7 @@ namespace SensingTexAPI
 			byte bytehigh = 0;
 			int adc_value = 0;
 			int tmp;
-            double tmpDouble;
+			double tmpDouble;
 
 			if (port.BytesToRead < port.ReceivedBytesThreshold)
 			{
@@ -613,20 +644,21 @@ namespace SensingTexAPI
 							state = ReadDataState.ROWS_PER_COLUMN;
 						}
 						else if (tmp == 'K')
+						{
+							state = ReadDataState.ERROR;
+							Console.WriteLine("SERIAL PROTOCOL INFO: K received");
+						}
+						else
+						{
+							state = ReadDataState.ERROR;
+							if (tmp != 'H')
 							{
-								state = ReadDataState.ERROR;
-								Console.WriteLine("SERIAL PROTOCOL INFO: K received");
+								Console.WriteLine("SERIAL PROTOCOL ERROR: M not received");
 							}
-							else
-							{
-								state = ReadDataState.ERROR;
-								if (tmp != 'H') {
-									Console.WriteLine ("SERIAL PROTOCOL ERROR: M not received");
-								}
-							}
+						}
 						break;
 					case ReadDataState.ROWS_PER_COLUMN:
-						rowspercol = (byte) tmp;
+						rowspercol = (byte)tmp;
 						if (tmp == Rows)
 						{
 							state = ReadDataState.COLUMN;
@@ -658,24 +690,24 @@ namespace SensingTexAPI
 						else
 						{
 							bytehigh = 0;
-							adc_value |= ((int) tmp) << 8;
+							adc_value |= ((int)tmp) << 8;
 							tmpDouble = ConvertADCValue(adc_value);
-                            if (tmpDouble <= minimoAceptado)
-                            {
-                                tmpDouble = 0;
-                            }
-							tmpData [count, col] = tmpDouble;
-							
+							if (tmpDouble <= minimoAceptado)
+							{
+								tmpDouble = 0;
+							}
+							tmpData[count, col] = tmpDouble;
+
 							count++;
 							if (count == Rows)
 							{
 								state = ReadDataState.END_OF_LINE;
 							}
 							else if (count > Rows)
-								{
-									state = ReadDataState.ERROR;
-									Console.WriteLine("SERIAL PROTOCOL ERROR: count > Rows");
-								}
+							{
+								state = ReadDataState.ERROR;
+								Console.WriteLine("SERIAL PROTOCOL ERROR: count > Rows");
+							}
 						}
 						break;
 					case ReadDataState.END_OF_LINE:
@@ -716,10 +748,10 @@ namespace SensingTexAPI
 			}
 		}
 
-        /// <summary>
-        /// Returns a data matrix all filled with zeros. For debug or init purposes.
-        /// </summary>
-        /// <returns>0 data matrix</returns>
+		/// <summary>
+		/// Returns a data matrix all filled with zeros. For debug or init purposes.
+		/// </summary>
+		/// <returns>0 data matrix</returns>
 		public double[,] GetZeroData()
 		{
 			Double[,] data = new Double[Rows, Columns];
@@ -735,11 +767,11 @@ namespace SensingTexAPI
 			return data;
 		}
 
-        /// <summary>
-        /// Returns a data matrix with random data. Used with the "SIM" port option or debug purposes.
-        /// </summary>
-        /// <param name="max">maximum number allowed to be used in the random generator.</param>
-        /// <returns>a matrix with random value between 0 and max</returns>
+		/// <summary>
+		/// Returns a data matrix with random data. Used with the "SIM" port option or debug purposes.
+		/// </summary>
+		/// <param name="max">maximum number allowed to be used in the random generator.</param>
+		/// <returns>a matrix with random value between 0 and max</returns>
 		public double[,] GetRandomData(double max)
 		{
 			Double[,] data = new Double[Rows, Columns];
@@ -768,17 +800,82 @@ namespace SensingTexAPI
 				{
 					if (x >= 0 && x <= 2 || y >= 0 && y <= 2 || x >= 13 && x <= 15 || y >= 13 && y <= 15)
 					{
-						double setVal = max / 2.5;
+						double setVal = max / 5;
 						data[x, y] = setVal;
 					}
-					else if(x >= 3 && x <= 5 || y >= 3 && y <= 5 || x >= 10 && x <= 12 || y >= 10 && y <= 12)
+					else if (x >= 3 && x <= 5 || y >= 3 && y <= 5 || x >= 10 && x <= 12 || y >= 10 && y <= 12)
 					{
-						double setVal = max / 1.75;
+						double setVal = max / 4;
 						data[x, y] = setVal;
 					}
-					else 
+					else
 					{
-						double setVal = max / 1.45;
+						double setVal = max / 2;
+						data[x, y] = setVal;
+					}
+
+				}
+			}
+
+			return data;
+		}
+
+
+		public double[,] GetBData(double max)
+		{
+			Double[,] data = new Double[Rows, Columns];
+
+			Random rand = new Random();
+			for (var x = 0; x < Rows; x++)
+			{
+				for (var y = 0; y < Columns; y++)
+				{
+					// Seventh
+					if (y == 0 || (x == 7 && y <= 8) || (x == 8 && y <= 8) || ((x == 0 || x == 15) && (y >= 8 && y <= 12)) || ((x == 6 || x == 9) && (y >= 8 && y <= 10)) || ((x == 1 || x == 2 || x == 4 || x == 5 || x == 10 || x == 11 || x == 13 || x == 14) && y >= 13))
+					{
+						double setVal = max / 2;
+						data[x, y] = setVal;
+					}
+					// First
+					else if (y==4 && (x==3 || x==12))
+					{
+						double setVal = max / 1.32;
+						data[x, y] = setVal;
+					}
+					// Second
+					else if (y == 5 && (x == 3 || x == 12))
+					{
+						double setVal = max / 1.4;
+						data[x, y] = setVal;
+					}
+					// Third
+					else if ((y == 3 && (x==3 || x==12)) || ((x==2 || x==4 || x==11 || x==13) && (y>=3 && y<=5)))
+					{
+						double setVal = max / 1.46;
+						data[x, y] = setVal;
+					}
+					// Fourth
+					else if ((y == 6 && (x == 2 || x == 4 || x==11 || x==13)) || ((x==3 || x==12) && (y>=6 && y<=12)))
+					{
+						double setVal = max / 1.5;
+						data[x, y] = setVal;
+					}
+					// Fifth highest
+					else if ((y == 2 && ((x>=1 && x<=5) || (x >= 10 && x <= 14))) || ((x==1 || x==5 || x==10 || x==14) && (y>=3 && y<=6)) || ((x==2 || x==4 || x==11 || x==13) && (y==7 || y==8)) || ((x==3 || x==12) && y>=13))
+					{
+						double setVal = max/1.65;
+						data[x, y] = setVal;
+					}
+					// Eigth
+					else if (((x==0 || x==15) && y>=13) || ((x==6 || x==9) && y>=11) || ((x==7 || x==8) && y>=9))
+					{
+						double setVal = max / 3;
+						data[x, y] = setVal;
+					}
+					// Sixth
+					else
+					{
+						double setVal = max / 1.85;
 						data[x, y] = setVal;
 					}
 
@@ -793,27 +890,26 @@ namespace SensingTexAPI
 		/// </summary>
 		private void EmitDataReadyEvent()
 		{
-            //Raise and event with new data available
+			//Raise and event with new data available
 			if (DataReadyEvent != null)
 			{
-                Data = new double[Rows, Columns];
-                for (int i = 0; i < Rows; i++)
-                    for (int j = 0; j < Columns; j++)
-                        Data[i, j] = tmpData[i, j];
+				Data = new double[Rows, Columns];
+				for (int i = 0; i < Rows; i++)
+					for (int j = 0; j < Columns; j++)
+						Data[i, j] = tmpData[i, j];
 
-                DataReadyEventArgs ev = new DataReadyEventArgs(Data);
-                DataReadyEvent(this, ev);
+				DataReadyEventArgs ev = new DataReadyEventArgs(Data);
+				DataReadyEvent(this, ev);
 			}
 
 			return;
-
 		}
 
-        /// <summary>
-        /// It handles the Data Received event from the serial port.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+		/// <summary>
+		/// It handles the Data Received event from the serial port.
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void OnDataReceived(object sender, SerialDataReceivedEventArgs e)
 		{
 			ReadDataState state;
@@ -830,10 +926,10 @@ namespace SensingTexAPI
 			return;
 		}
 
-        /// <summary>
-        /// "SIM" port timer event handler
-        /// </summary>
-        /// <param name="sender"></param>
+		/// <summary>
+		/// "SIM" port timer event handler
+		/// </summary>
+		/// <param name="sender"></param>
 		protected void OnSimulationTimerEvent(object sender)
 		{
 			if (portOpen && started && portName == "SIM")
@@ -853,13 +949,23 @@ namespace SensingTexAPI
 				EmitDataReadyEvent();
 			}
 		}
+
+		protected void OnBSimulationTimerEvent(object sender)
+		{
+			if (portOpen && started && portName == "BSIM")
+			{
+				tmpData = GetBData(4096);
+
+				EmitDataReadyEvent();
+			}
+		}
 		/// <summary>
 		/// "SIM" port timer event handler
 		/// </summary>
 		/// <param name="sender"></param>
 		protected void OnDetectPortTimerEvent(object sender)
 		{
-            bool oldstarted;
+			bool oldstarted;
 
 			if (portOpen && !port.IsOpen)
 			{
